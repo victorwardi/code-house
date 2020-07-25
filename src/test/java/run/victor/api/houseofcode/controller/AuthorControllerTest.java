@@ -1,23 +1,16 @@
-package run.victor.deveficiente.api.casadocodigo.controller;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.Random;
+package run.victor.api.houseofcode.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import run.victor.deveficiente.api.casadocodigo.model.Author;
-import run.victor.deveficiente.api.casadocodigo.repository.AuthorRepository;
+import run.victor.api.houseofcode.model.Author;
+import run.victor.api.houseofcode.repository.AuthorRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

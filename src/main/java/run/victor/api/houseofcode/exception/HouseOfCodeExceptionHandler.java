@@ -1,4 +1,4 @@
-package run.victor.deveficiente.api.casadocodigo.exception;
+package run.victor.api.houseofcode.exception;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package run.victor.deveficiente.api.casadocodigo.model;
+package run.victor.api.houseofcode.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

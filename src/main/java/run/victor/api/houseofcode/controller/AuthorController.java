@@ -1,14 +1,13 @@
-package run.victor.deveficiente.api.casadocodigo.controller;
+package run.victor.api.houseofcode.controller;
 
 import javax.validation.Valid;
 
-import run.victor.deveficiente.api.casadocodigo.exception.AuthorNotFoundExcepiton;
-import run.victor.deveficiente.api.casadocodigo.model.Author;
+import run.victor.api.houseofcode.model.Author;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import run.victor.deveficiente.api.casadocodigo.repository.AuthorRepository;
+import run.victor.api.houseofcode.repository.AuthorRepository;
 
 /**
  * @author Victor Wardi - @victorwardi

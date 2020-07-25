@@ -1,9 +1,9 @@
-package run.victor.deveficiente.api.casadocodigo.repository;
+package run.victor.api.houseofcode.repository;
 
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import run.victor.deveficiente.api.casadocodigo.model.Author;
+import run.victor.api.houseofcode.model.Author;
 
 /**
  * @author Victor Wardi - @victorwardi
