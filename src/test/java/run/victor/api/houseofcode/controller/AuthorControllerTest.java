@@ -9,9 +9,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import run.victor.api.houseofcode.model.Author;
 import run.victor.api.houseofcode.repository.AuthorRepository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -31,9 +31,23 @@ class AuthorControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Test
+    void whenAuthorValid_thenReturnsStatus200() throws Exception {
+
+        Author authorValid = Author.builder()
+            .name("Bart Simpson")
+            .email("bart@springfield.fox")
+            .description("Random description")
+            .build();
+
+        String requestBody = objectMapper.writeValueAsString(authorValid);
+
+        mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
+            .andExpect(status().isOk());
+    }
 
     @Test
-    void whenAuthorNameInvalid_thenReturnsStatus400() throws Exception {
+    void whenAuthorNameNotInformed_thenReturnsStatus400() throws Exception {
 
         Author authorWithoutName = Author.builder()
             .email("bart@springfield.fox")
@@ -42,10 +56,58 @@ class AuthorControllerTest {
 
         String requestBody = objectMapper.writeValueAsString(authorWithoutName);
 
-        mockMvc.perform(post(URL)
-            .contentType("application/json")
-            .content(requestBody))
-            .andExpect(status().isBadRequest());
+        mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(containsString("\"name\":\"is required\"")));
     }
 
+    @Test
+    void whenAuthorEmailNotInformed_thenReturnsStatus400() throws Exception {
+
+        Author authorWithoutEmail = Author.builder()
+            .name("Bart Simpson")
+            .description("Random description")
+            .build();
+
+        String requestBody = objectMapper.writeValueAsString(authorWithoutEmail);
+
+        mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(containsString("\"email\":\"is required\"")));
+    }
+
+    @Test
+    void whenAuthorEmailInvalidFormat_thenReturnsStatus400() throws Exception {
+
+        Author authorWithoutEmail = Author.builder()
+            .name("Bart Simpson")
+            .email("emailmail.com")
+            .description("Random description")
+            .build();
+
+        String requestBody = objectMapper.writeValueAsString(authorWithoutEmail);
+
+        mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(containsString("\"email\":\"must be a well-formed email address\"")));
+    }
+
+    @Test
+    void whenDescriptionBiggerThen400_thenReturnsStatus400() throws Exception {
+
+        Author authorWithoutEmail = Author.builder()
+            .name("Bart Simpson")
+            .email("bart@springfield.fox")
+            .description("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in " +
+                "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt " +
+                "in culpa qui officia deserunt mollit anim id est laborum.")
+            .build();
+
+        String requestBody = objectMapper.writeValueAsString(authorWithoutEmail);
+
+        mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(containsString("\"description\":\"size must be between 0 and 400\"")));
+    }
 }
