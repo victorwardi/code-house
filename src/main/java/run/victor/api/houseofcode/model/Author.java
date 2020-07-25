@@ -26,22 +26,12 @@ import org.hibernate.annotations.CreationTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Author {
-
     @Id
     @GeneratedValue
     private Long id;
-
-    @NotBlank( message = "is required")
     private String name;
-
-    @NotBlank( message = "is required")
-    @Email
     private String email;
-
-    @Size(max = 400)
     private String description;
-
     @CreationTimestamp
     private LocalDateTime createDateTime;
-
 }

@@ -1,5 +1,8 @@
 package run.victor.api.houseofcode.controller;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import run.victor.api.houseofcode.model.Author;
@@ -7,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import run.victor.api.houseofcode.repository.AuthorRepository;
+import run.victor.api.houseofcode.request.NewAuthorRequest;
 
 /**
  * @author Victor Wardi - @victorwardi
@@ -17,14 +20,13 @@ import run.victor.api.houseofcode.repository.AuthorRepository;
 @RequestMapping("/v1/authors")
 public class AuthorController {
 
-    private final AuthorRepository authorRepository;
-
-    public AuthorController(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @PostMapping
-    public Author registerAuthor(@RequestBody @Valid Author author){
-         return authorRepository.save(author);
+    @Transactional
+    public Author registerAuthor(@RequestBody @Valid NewAuthorRequest newAuthorRequest) {
+        Author author = newAuthorRequest.toModel();
+        return entityManager.merge(author);
     }
 }

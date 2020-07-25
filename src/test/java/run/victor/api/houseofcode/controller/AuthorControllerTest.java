@@ -1,5 +1,7 @@
 package run.victor.api.houseofcode.controller;
 
+import javax.persistence.EntityManager;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import run.victor.api.houseofcode.model.Author;
-import run.victor.api.houseofcode.repository.AuthorRepository;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,7 +27,7 @@ class AuthorControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    AuthorRepository authorRepository;
+    EntityManager entityManager;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -91,6 +92,22 @@ class AuthorControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().string(containsString("\"email\":\"must be a well-formed email address\"")));
     }
+
+    @Test
+    void whenAuthorDescriptionNotInformed_thenReturnsStatus400() throws Exception {
+
+        Author authorWithoutEmail = Author.builder()
+            .name("Bart Simpson")
+            .email("bart@springfield.fox")
+            .build();
+
+        String requestBody = objectMapper.writeValueAsString(authorWithoutEmail);
+
+        mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(containsString("\"description\":\"is required\"")));
+    }
+
 
     @Test
     void whenDescriptionBiggerThen400_thenReturnsStatus400() throws Exception {
