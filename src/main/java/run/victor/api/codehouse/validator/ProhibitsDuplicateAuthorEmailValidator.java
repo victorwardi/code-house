@@ -2,7 +2,6 @@ package run.victor.api.codehouse.validator;
 
 import java.util.Optional;
 
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -20,12 +19,10 @@ public class ProhibitsDuplicateAuthorEmailValidator implements Validator {
 
     private final AuthorRepository authorRepository;
 
-    private final MessageSource messageSource;
-
-    public ProhibitsDuplicateAuthorEmailValidator(AuthorRepository authorRepository, MessageSource messageSource) {
+    public ProhibitsDuplicateAuthorEmailValidator(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
-        this.messageSource = messageSource;
     }
+
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -34,6 +31,11 @@ public class ProhibitsDuplicateAuthorEmailValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
+        //Only validates email if default properties have been checked. and there is no more erros
+        if(errors.hasErrors()){
+            return;
+        }
+
         NewAuthorRequest author = (NewAuthorRequest) o;
         Optional<Author> optionalAuthor = authorRepository.findByEmail(author.getEmail());
         if (optionalAuthor.isPresent()) {

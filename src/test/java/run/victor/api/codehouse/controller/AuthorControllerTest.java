@@ -3,14 +3,19 @@ package run.victor.api.codehouse.controller;
 import javax.persistence.EntityManager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import run.victor.api.codehouse.model.Author;
+import run.victor.api.codehouse.validator.ProhibitsDuplicateAuthorEmailValidator;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,9 +37,16 @@ class AuthorControllerTest {
     @MockBean
     private EntityManager entityManager;
 
+    @MockBean
+    private ProhibitsDuplicateAuthorEmailValidator prohibitsDuplicateAuthorEmailValidator;
+
+    @BeforeEach
+    void setUp() {
+        when(prohibitsDuplicateAuthorEmailValidator.supports(any())).thenReturn(true);
+    }
+
     @Test
     void whenAuthorValid_thenReturnsStatus200() throws Exception {
-
         Author authorValid = Author.builder()
             .name("Bart Simpson")
             .email("bart@springfield.fox")
@@ -46,6 +58,8 @@ class AuthorControllerTest {
         mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
             .andExpect(status().isOk());
     }
+
+
 
     @Test
     void whenAuthorNameNotInformed_thenReturnsStatus400() throws Exception {
@@ -126,5 +140,10 @@ class AuthorControllerTest {
         mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
             .andExpect(status().isBadRequest())
             .andExpect(content().string(containsString("\"description\":\"size must be between 0 and 400\"")));
+
+
     }
+
+
+
 }
