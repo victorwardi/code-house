@@ -1,16 +1,16 @@
-package run.victor.api.houseofcode.controller;
+package run.victor.api.codehouse.controller;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import run.victor.api.houseofcode.model.Author;
+import run.victor.api.codehouse.model.Author;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import run.victor.api.houseofcode.request.NewAuthorRequest;
+import run.victor.api.codehouse.request.NewAuthorRequest;
 
 /**
  * @author Victor Wardi - @victorwardi

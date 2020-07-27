@@ -1,4 +1,4 @@
-package run.victor.api.houseofcode.controller;
+package run.victor.api.codehouse.controller;
 
 import javax.persistence.EntityManager;
 
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import run.victor.api.houseofcode.model.Author;
+import run.victor.api.codehouse.model.Author;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

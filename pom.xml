@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>run.victor.deveficiente.api</groupId>
-    <artifactId>houseofcode</artifactId>
+    <artifactId>codehouse</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name></name>
-    <description>House of Code API - Efficient Developer's Journey</description>
+    <description>Code House API - Efficient Developer's Journey</description>
 
     <properties>
         <java.version>11</java.version>

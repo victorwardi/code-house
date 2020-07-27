@@ -1,18 +1,13 @@
-package run.victor.api.houseofcode.request;
+package run.victor.api.codehouse.request;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import run.victor.api.houseofcode.model.Author;
+import run.victor.api.codehouse.model.Author;
 
 
 /**

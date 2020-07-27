@@ -1,4 +1,4 @@
-package run.victor.api.houseofcode.exception;
+package run.victor.api.codehouse.exception;
 
 /**
  * @author Victor Wardi - @victorwardi
