@@ -1,7 +1,6 @@
 package run.victor.api.codehouse.controller;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -20,8 +19,11 @@ import run.victor.api.codehouse.request.NewAuthorRequest;
 @RequestMapping("/v1/authors")
 public class AuthorController {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
+
+    public AuthorController(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @PostMapping
     @Transactional

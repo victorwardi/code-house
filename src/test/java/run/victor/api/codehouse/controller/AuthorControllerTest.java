@@ -1,13 +1,18 @@
 package run.victor.api.codehouse.controller;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import run.victor.api.codehouse.model.Author;
 
 import static org.hamcrest.Matchers.containsString;
@@ -26,11 +31,11 @@ class AuthorControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    EntityManager entityManager;
-
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private EntityManager entityManager;
 
     @Test
     void whenAuthorValid_thenReturnsStatus200() throws Exception {
