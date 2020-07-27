@@ -21,6 +21,8 @@ import run.victor.api.codehouse.exception.UniqueEmailException;
 
 
 /**
+ * Entity to Author table.
+ *
  * @author Victor Wardi - @victorwardi
  */
 @Entity
@@ -47,16 +49,4 @@ public class Author {
 
     @CreationTimestamp
     private LocalDateTime createDateTime;
-
-    /**
-     * Check if email is unique
-     * @param entityManager
-     */
-    public void checkEmail(EntityManager entityManager) {
-        Assert.hasLength(email, "Email must be valid");
-        List resultList = entityManager.createQuery("from Author where email = ?1").setParameter(1, email).getResultList();
-        if (resultList.size() > 0) {
-            throw new UniqueEmailException();
-        }
-    }
 }

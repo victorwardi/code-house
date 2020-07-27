@@ -54,4 +54,8 @@ public class NewAuthorRequest {
     public Author toModel(){
         return Author.builder().name(name).email(email).description(description).build();
     }
+
+    public String getEmail() {
+        return email;
+    }
 }
