@@ -10,3 +10,7 @@ spring:
     driverClassName: org.h2.Driver
   jackson:
     default-property-inclusion: non_null
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create

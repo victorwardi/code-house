@@ -14,9 +14,9 @@ import run.victor.api.codehouse.request.NewAuthorRequest;
 /**
  * @author Victor Wardi - @victorwardi
  */
-
 @RestController
 @RequestMapping("/v1/authors")
+//2
 public class AuthorController {
 
     private final EntityManager entityManager;
@@ -29,6 +29,8 @@ public class AuthorController {
     @Transactional
     public Author registerAuthor(@RequestBody @Valid NewAuthorRequest newAuthorRequest) {
         Author author = newAuthorRequest.toModel();
-        return entityManager.merge(author);
+        author.checkEmail(entityManager);
+        entityManager.persist(author);
+        return author;
     }
 }
