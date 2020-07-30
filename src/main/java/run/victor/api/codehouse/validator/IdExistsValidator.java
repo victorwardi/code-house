@@ -12,7 +12,7 @@ import org.springframework.util.Assert;
 /**
  * @author Victor Wardi - @victorwardi
  */
-public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Object> {
+public class IdExistsValidator implements ConstraintValidator<IdExists, Object> {
 
     private String domainAttribute;
     private Class<?> aClass;
@@ -21,9 +21,9 @@ public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Ob
     private EntityManager entityManager;
 
     @Override
-    public void initialize(UniqueValue uniqueValue) {
-        domainAttribute = uniqueValue.fieldName();
-        aClass = uniqueValue.domainClass();
+    public void initialize(IdExists idExists) {
+        domainAttribute = idExists.fieldName();
+        aClass = idExists.domainClass();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Ob
         Query query = entityManager.createQuery("SELECT 1 FROM " + aClass.getName() + " WHERE " + domainAttribute + " = :value");
         query.setParameter("value", value);
         List<?> list = query.getResultList();
-        Assert.state(list.size() <= 1, "More than one record of " + aClass + " with attribute "+ domainAttribute + " equal: '" + value + "' was found.");
-        return list.isEmpty();
+        Assert.state(list.size() >= 1, "One record of " + aClass + " with attribute "+ domainAttribute + " equal : '" + value + "' must exists.");
+        return !list.isEmpty();
     }
 }

@@ -8,14 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
-import run.victor.api.codehouse.model.Author;
-import run.victor.api.codehouse.model.Category;
 import run.victor.api.codehouse.request.NewCategoryRequest;
-import run.victor.api.codehouse.validator.ProhibitsDuplicateAuthorEmailValidator;
 import run.victor.api.codehouse.validator.ProhibitsDuplicateCategoryValidator;
 
 import static org.hamcrest.Matchers.containsString;
@@ -28,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Victor Wardi - @victorwardi
  */
-@WebMvcTest(controllers = CategoryController.class)
-class CategoryControllerTest {
+@WebMvcTest(controllers = CategoriesController.class)
+class CategoriesControllerTest {
 
     private static final String URL = "/v1/categories";
 

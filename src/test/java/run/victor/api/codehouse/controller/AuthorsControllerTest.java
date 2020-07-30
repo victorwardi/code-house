@@ -1,17 +1,14 @@
 package run.victor.api.codehouse.controller;
 
 import javax.persistence.EntityManager;
-import javax.xml.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import run.victor.api.codehouse.model.Author;
 import run.victor.api.codehouse.request.NewAuthorRequest;
 import run.victor.api.codehouse.validator.ProhibitsDuplicateAuthorEmailValidator;
 
@@ -25,8 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Victor Wardi - @victorwardi
  */
-@WebMvcTest(controllers = AuthorController.class)
-class AuthorControllerTest {
+@WebMvcTest(controllers = AuthorsController.class)
+class AuthorsControllerTest {
 
     private static final String URL = "/v1/authors";
 

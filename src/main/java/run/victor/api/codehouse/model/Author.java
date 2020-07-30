@@ -4,9 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -35,6 +37,9 @@ public class Author {
 
     @CreationTimestamp
     private LocalDateTime createDateTime;
+
+    @OneToMany
+    Set<Book> books;
 
     @Deprecated
     public Author() {
