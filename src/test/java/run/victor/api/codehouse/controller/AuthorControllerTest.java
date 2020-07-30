@@ -1,6 +1,7 @@
 package run.victor.api.codehouse.controller;
 
 import javax.persistence.EntityManager;
+import javax.xml.validation.Validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import run.victor.api.codehouse.model.Author;
+import run.victor.api.codehouse.request.NewAuthorRequest;
 import run.victor.api.codehouse.validator.ProhibitsDuplicateAuthorEmailValidator;
 
 import static org.hamcrest.Matchers.containsString;
@@ -47,13 +49,9 @@ class AuthorControllerTest {
 
     @Test
     void whenAuthorValid_thenReturnsStatus200() throws Exception {
-        Author authorValid = Author.builder()
-            .name("Bart Simpson")
-            .email("bart@springfield.fox")
-            .description("Random description")
-            .build();
+        NewAuthorRequest validAuthor = NewAuthorRequest.create("Bart Simpson", "bart@springfield.fox", "Random description");
 
-        String requestBody = objectMapper.writeValueAsString(authorValid);
+        String requestBody = objectMapper.writeValueAsString(validAuthor);
 
         mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
             .andExpect(status().isOk());
@@ -63,14 +61,8 @@ class AuthorControllerTest {
 
     @Test
     void whenAuthorNameNotInformed_thenReturnsStatus400() throws Exception {
-
-        Author authorWithoutName = Author.builder()
-            .email("bart@springfield.fox")
-            .description("Random description")
-            .build();
-
+        NewAuthorRequest authorWithoutName = NewAuthorRequest.create(null, "bart@springfield.fox", "Random description");
         String requestBody = objectMapper.writeValueAsString(authorWithoutName);
-
         mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
             .andExpect(status().isBadRequest())
             .andExpect(content().string(containsString("Name must be informed")));
@@ -79,10 +71,7 @@ class AuthorControllerTest {
     @Test
     void whenAuthorEmailNotInformed_thenReturnsStatus400() throws Exception {
 
-        Author authorWithoutEmail = Author.builder()
-            .name("Bart Simpson")
-            .description("Random description")
-            .build();
+        NewAuthorRequest authorWithoutEmail = NewAuthorRequest.create("Bart Simpson", null, "Random description");
 
         String requestBody = objectMapper.writeValueAsString(authorWithoutEmail);
 
@@ -93,14 +82,8 @@ class AuthorControllerTest {
 
     @Test
     void whenAuthorEmailInvalidFormat_thenReturnsStatus400() throws Exception {
-
-        Author authorWithoutEmail = Author.builder()
-            .name("Bart Simpson")
-            .email("emailmail.com")
-            .description("Random description")
-            .build();
-
-        String requestBody = objectMapper.writeValueAsString(authorWithoutEmail);
+        NewAuthorRequest authorWithoutValidEmail = NewAuthorRequest.create("Bart Simpson", "emailmail.com", "Random description");
+        String requestBody = objectMapper.writeValueAsString(authorWithoutValidEmail);
 
         mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
             .andExpect(status().isBadRequest())
@@ -110,12 +93,8 @@ class AuthorControllerTest {
     @Test
     void whenAuthorDescriptionNotInformed_thenReturnsStatus400() throws Exception {
 
-        Author authorWithoutEmail = Author.builder()
-            .name("Bart Simpson")
-            .email("bart@springfield.fox")
-            .build();
-
-        String requestBody = objectMapper.writeValueAsString(authorWithoutEmail);
+        NewAuthorRequest authorWithoutDescription = NewAuthorRequest.create("Bart Simpson", "bart@springfield.fox", null);
+        String requestBody = objectMapper.writeValueAsString(authorWithoutDescription);
 
         mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
             .andExpect(status().isBadRequest())
@@ -126,22 +105,17 @@ class AuthorControllerTest {
     @Test
     void whenDescriptionBiggerThen400_thenReturnsStatus400() throws Exception {
 
-        Author authorWithoutEmail = Author.builder()
-            .name("Bart Simpson")
-            .email("bart@springfield.fox")
-            .description("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+        NewAuthorRequest authorWithVeryLongDescription = NewAuthorRequest.create("Bart Simpson", "bart@springfield.fox", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
                 "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in " +
                 "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt " +
-                "in culpa qui officia deserunt mollit anim id est laborum.")
-            .build();
+                "in culpa qui officia deserunt mollit anim id est laborum.");
 
-        String requestBody = objectMapper.writeValueAsString(authorWithoutEmail);
+
+        String requestBody = objectMapper.writeValueAsString(authorWithVeryLongDescription);
 
         mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
             .andExpect(status().isBadRequest())
-            .andExpect(content().string(containsString("\"description\":\"size must be between 0 and 400\"")));
-
-
+            .andExpect(content().string(containsString("size must be between 0 and 400")));
     }
 
 

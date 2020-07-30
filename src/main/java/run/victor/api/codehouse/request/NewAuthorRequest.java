@@ -10,10 +10,12 @@ import lombok.Data;
 import lombok.Getter;
 import org.springframework.util.Assert;
 import run.victor.api.codehouse.model.Author;
+import run.victor.api.codehouse.model.Category;
+import run.victor.api.codehouse.validator.UniqueValue;
 
 
 /**
- * Class create to represent a new author
+ * Class to represent a new author request
  * @author Victor Wardi - @victorwardi
  */
 public class NewAuthorRequest {
@@ -23,11 +25,13 @@ public class NewAuthorRequest {
 
     @NotBlank
     @Email
+    @UniqueValue(domainClass = Author.class, fieldName = "email")
     private final String email;
 
     @NotBlank
     @Size(max = 400)
     private final String description;
+
 
     private NewAuthorRequest(String name, String email, String description) {
         this.name = name;
@@ -40,22 +44,27 @@ public class NewAuthorRequest {
      * @param name
      * @param email
      * @param description
-     * @return
+     * @return NewAuthorRequest
      */
     public static NewAuthorRequest create(@NotBlank String name,
                                           @NotBlank @Email String email,
                                           @NotBlank @Size(max = 400) String description) {
-        Assert.hasLength(name, "Name is required");
-        Assert.hasLength(email, "Email is required");
-        Assert.hasLength(description, "Description is required");
-        return new NewAuthorRequest(name, email, description);
+           return new NewAuthorRequest(name, email, description);
     }
 
     public Author toModel(){
-        return Author.builder().name(name).email(email).description(description).build();
+        return Author.create(name, email, description);
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

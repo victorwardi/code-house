@@ -35,7 +35,6 @@ public class ProhibitsDuplicateAuthorEmailValidator implements Validator {
         if(errors.hasErrors()){
             return;
         }
-
         NewAuthorRequest author = (NewAuthorRequest) o;
         Optional<Author> optionalAuthor = authorRepository.findByEmail(author.getEmail());
         if (optionalAuthor.isPresent()) {
