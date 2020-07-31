@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Victor Wardi - @victorwardi
  */
 @WebMvcTest(controllers = AuthorsController.class)
-@AutoConfigureTestEntityManager
 class AuthorsControllerIT {
 
     private static final String URL = "/v1/authors";
