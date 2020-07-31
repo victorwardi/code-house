@@ -7,11 +7,13 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
  * @author Victor Wardi - @victorwardi
  */
+@Component
 public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Object> {
 
     private String domainAttribute;

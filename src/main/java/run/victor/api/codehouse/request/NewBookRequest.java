@@ -25,7 +25,7 @@ import run.victor.api.codehouse.validator.UniqueValue;
 public class NewBookRequest {
 
     @NotBlank
-    //@UniqueValue(domainClass = Book.class, fieldName = "title")
+    @UniqueValue(domainClass = Book.class, fieldName = "title")
     private String title;
 
     @NotBlank

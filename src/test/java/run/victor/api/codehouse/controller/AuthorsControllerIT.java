@@ -1,16 +1,19 @@
 package run.victor.api.codehouse.controller;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import run.victor.api.codehouse.request.NewAuthorRequest;
 import run.victor.api.codehouse.validator.ProhibitsDuplicateAuthorEmailValidator;
+import run.victor.api.codehouse.validator.UniqueValueValidator;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,7 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Victor Wardi - @victorwardi
  */
 @WebMvcTest(controllers = AuthorsController.class)
-class AuthorsControllerTest {
+@AutoConfigureTestEntityManager
+class AuthorsControllerIT {
 
     private static final String URL = "/v1/authors";
 
@@ -37,19 +41,12 @@ class AuthorsControllerTest {
     private EntityManager entityManager;
 
     @MockBean
-    private ProhibitsDuplicateAuthorEmailValidator prohibitsDuplicateAuthorEmailValidator;
-
-    @BeforeEach
-    void setUp() {
-        when(prohibitsDuplicateAuthorEmailValidator.supports(any())).thenReturn(true);
-    }
+    private EntityManagerFactory entityManagerFactory;
 
     @Test
     void whenAuthorValid_thenReturnsStatus200() throws Exception {
         NewAuthorRequest validAuthor = NewAuthorRequest.create("Bart Simpson", "bart@springfield.fox", "Random description");
-
         String requestBody = objectMapper.writeValueAsString(validAuthor);
-
         mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
             .andExpect(status().isOk());
     }

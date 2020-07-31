@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Victor Wardi - @victorwardi
  */
 @WebMvcTest(controllers = CategoriesController.class)
-class CategoriesControllerTest {
+class CategoriesControllerIT {
 
     private static final String URL = "/v1/categories";
 
