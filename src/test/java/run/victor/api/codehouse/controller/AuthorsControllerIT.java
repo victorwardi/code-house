@@ -1,11 +1,13 @@
 package run.victor.api.codehouse.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import run.victor.api.codehouse.repository.AuthorRepository;
 import run.victor.api.codehouse.request.NewAuthorRequest;
@@ -21,6 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Sql("/data/authors.sql")
+@Sql(scripts = "/data/clean-authors.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class AuthorsControllerIT {
 
     private static final String URL = "/v1/authors";
@@ -34,8 +38,21 @@ class AuthorsControllerIT {
     @Autowired
     AuthorRepository authorRepository;
 
+    @BeforeAll
+
+    static void beforeAll() {
+        System.out.printf("###############################################");
+    }
+
     @Test
     void whenAuthorValid_thenReturnsStatus200() throws Exception {
+        NewAuthorRequest validAuthor = NewAuthorRequest.create("Bart Simpson", "bart@springfield.fox", "Random description");
+        String requestBody = objectMapper.writeValueAsString(validAuthor);
+        mockMvc.perform(post(URL).contentType("application/json").content(requestBody)).andExpect(status().isOk());
+    }
+
+    @Test
+    void whenAuthorValid3_thenReturnsStatus200() throws Exception {
         NewAuthorRequest validAuthor = NewAuthorRequest.create("Bart Simpson", "bart@springfield.fox", "Random description");
         String requestBody = objectMapper.writeValueAsString(validAuthor);
         mockMvc.perform(post(URL).contentType("application/json").content(requestBody)).andExpect(status().isOk());
@@ -94,6 +111,4 @@ class AuthorsControllerIT {
             .andExpect(status().isBadRequest())
             .andExpect(content().string(containsString("size must be between 0 and 400")));
     }
-
-
 }
