@@ -1,15 +1,16 @@
 package run.victor.api.codehouse.controller;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import run.victor.api.codehouse.model.Book;
 import run.victor.api.codehouse.model.Category;
+import run.victor.api.codehouse.repository.CategoryRepository;
 import run.victor.api.codehouse.request.NewCategoryRequest;
 
 /**
@@ -20,14 +21,21 @@ import run.victor.api.codehouse.request.NewCategoryRequest;
 @RequestMapping("/v1/categories")
 public class CategoriesController {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final CategoryRepository categoryRepository;
+
+    public CategoriesController(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     @PostMapping
-    @Transactional
     public Category registerCategory(@RequestBody @Valid NewCategoryRequest newCategoryRequest) {
         Category category = newCategoryRequest.toModel();
-        entityManager.persist(category);
+        categoryRepository.save(category);
         return category;
+    }
+
+    @GetMapping()
+    public Iterable<Category> findAll() {
+        return  categoryRepository.findAll();
     }
 }

@@ -1,19 +1,17 @@
 package run.victor.api.codehouse.controller;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import run.victor.api.codehouse.model.Author;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import run.victor.api.codehouse.repository.AuthorRepository;
 import run.victor.api.codehouse.request.NewAuthorRequest;
-import run.victor.api.codehouse.validator.ProhibitsDuplicateAuthorEmailValidator;
 
 /**
  * @author Victor Wardi - @victorwardi
@@ -23,14 +21,21 @@ import run.victor.api.codehouse.validator.ProhibitsDuplicateAuthorEmailValidator
 //1
 public class AuthorsController {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final AuthorRepository authorRepository;
+
+    public AuthorsController(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
+    }
 
     @PostMapping
-    @Transactional
     public Author registerAuthor(@RequestBody @Valid NewAuthorRequest newAuthorRequest) {
         Author author = newAuthorRequest.toModel();
-        entityManager.persist(author);
+        authorRepository.save(author);
         return author;
+    }
+
+    @GetMapping()
+    public  Iterable<Author> findAll() {
+        return authorRepository.findAll();
     }
 }
