@@ -1,5 +1,6 @@
 package run.victor.api.codehouse.exception;
 
+import javax.validation.ValidationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +34,13 @@ public class CodeHouseExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UniqueEmailException.class)
     public Map<String, String> handleUniqueEmailException(UniqueEmailException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("Error:", ex.getLocalizedMessage());
+        return errors;
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ValidationException.class)
+    public Map<String, String> handleValidationException(ValidationException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("Error:", ex.getLocalizedMessage());
         return errors;

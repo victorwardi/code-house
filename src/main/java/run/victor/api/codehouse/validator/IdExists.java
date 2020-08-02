@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface IdExists {
 
-    String message() default "Field must exists";
+    String message() default "Field must exist on database";
 
     Class<?>[] groups() default {};
 

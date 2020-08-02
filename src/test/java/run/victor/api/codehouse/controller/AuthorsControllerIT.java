@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Sql("/data/authors.sql")
-@Sql(scripts = "/data/clean-authors.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "/data/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class AuthorsControllerIT {
 
     private static final String URL = "/v1/authors";
@@ -37,12 +37,6 @@ class AuthorsControllerIT {
 
     @Autowired
     AuthorRepository authorRepository;
-
-    @BeforeAll
-
-    static void beforeAll() {
-        System.out.printf("###############################################");
-    }
 
     @Test
     void whenAuthorValid_thenReturnsStatus200() throws Exception {

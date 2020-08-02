@@ -34,7 +34,7 @@ public class IdExistsValidator implements ConstraintValidator<IdExists, Object> 
         Query query = entityManager.createQuery("SELECT 1 FROM " + aClass.getName() + " WHERE " + domainAttribute + " = :value");
         query.setParameter("value", value);
         List<?> list = query.getResultList();
-        Assert.state(list.size() >= 1, "One record of " + aClass + " with attribute "+ domainAttribute + " equal : '" + value + "' must exists.");
+        Assert.state(list.size() <= 1, "One record of " + aClass + " with attribute "+ domainAttribute + " equal : '" + value + "' must exists.");
         return !list.isEmpty();
     }
 }
