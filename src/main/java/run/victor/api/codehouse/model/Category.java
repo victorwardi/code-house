@@ -8,6 +8,8 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
+import lombok.Builder;
+
 /**
  * Entity to represent Category table
  * @author Victor Wardi - @victorwardi
@@ -23,7 +25,7 @@ public class Category {
     private String name;
 
     @OneToMany
-    Set<Book> books;
+    private Set<Book> books;
 
     /**
      * Construct for Mapping purposes

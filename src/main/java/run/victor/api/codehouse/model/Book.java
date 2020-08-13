@@ -15,13 +15,11 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 /**
  * @author Victor Wardi - @victorwardi
  */
 @Entity
-public class Book {
+public class Book{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,7 +62,8 @@ public class Book {
     public Book() {
     }
 
-    private Book(String title, String description, String sumary, BigDecimal price, Integer pages, String isbn, LocalDateTime publishDate, Category category, Author author) {
+    private Book(Long id, String title, String description, String sumary, BigDecimal price, Integer pages, String isbn, LocalDateTime publishDate, Category category, Author author) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.sumary = sumary;
@@ -75,11 +74,6 @@ public class Book {
         this.category = category;
         this.author = author;
     }
-
-    public static Book create(String title, String description, String sumary, BigDecimal price, Integer pages, String isbn, LocalDateTime publishDate, Category category, Author author) {
-        return new Book(title, description, sumary, price, pages, isbn, publishDate, category, author);
-    }
-
 
     public Long getId() {
         return id;
@@ -119,5 +113,84 @@ public class Book {
 
     public Author getAuthor() {
         return author;
+    }
+
+    public static BookBuilder builder(){
+        return new BookBuilder();
+    }
+
+    public static class BookBuilder {
+        private Long id;
+        private String title;
+        private String description;
+        private String sumary;
+        private BigDecimal price;
+        private Integer pages;
+        private String isbn;
+        private LocalDateTime publishDate;
+        private Category category;
+        private Author author;
+
+        BookBuilder() {
+        }
+
+        public BookBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public BookBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public BookBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public BookBuilder sumary(String sumary) {
+            this.sumary = sumary;
+            return this;
+        }
+
+        public BookBuilder price(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public BookBuilder pages(Integer pages) {
+            this.pages = pages;
+            return this;
+        }
+
+        public BookBuilder isbn(String isbn) {
+            this.isbn = isbn;
+            return this;
+        }
+
+        public BookBuilder publishDate(LocalDateTime publishDate) {
+            this.publishDate = publishDate;
+            return this;
+        }
+
+        public BookBuilder category(Category category) {
+            this.category = category;
+            return this;
+        }
+
+        public BookBuilder author(Author author) {
+            this.author = author;
+            return this;
+        }
+
+        public Book build() {
+            return new Book(id, title, description, sumary, price, pages, isbn, publishDate, category, author);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" + "id=" + id + ", title='" + title + '\'' + ", isbn='" + isbn + '\'' + '}';
     }
 }

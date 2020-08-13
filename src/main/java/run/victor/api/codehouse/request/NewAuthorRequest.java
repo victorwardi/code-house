@@ -4,13 +4,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import org.springframework.util.Assert;
 import run.victor.api.codehouse.model.Author;
-import run.victor.api.codehouse.model.Category;
 import run.victor.api.codehouse.validator.UniqueValue;
 
 
@@ -39,17 +33,8 @@ public class NewAuthorRequest {
         this.description = description;
     }
 
-    /**
-     * Create a new author request
-     * @param name
-     * @param email
-     * @param description
-     * @return NewAuthorRequest
-     */
-    public static NewAuthorRequest create(@NotBlank String name,
-                                          @NotBlank @Email String email,
-                                          @NotBlank @Size(max = 400) String description) {
-           return new NewAuthorRequest(name, email, description);
+    public static NewAuthorRequestBuilder builder() {
+        return new NewAuthorRequestBuilder();
     }
 
     public Author toModel(){
@@ -66,5 +51,37 @@ public class NewAuthorRequest {
 
     public String getDescription() {
         return description;
+    }
+
+    public static class NewAuthorRequestBuilder {
+        private @NotBlank String name;
+        private @NotBlank @Email String email;
+        private @NotBlank @Size(max = 400) String description;
+
+        NewAuthorRequestBuilder() {
+        }
+
+        public NewAuthorRequestBuilder name(@NotBlank String name) {
+            this.name = name;
+            return this;
+        }
+
+        public NewAuthorRequestBuilder email(@NotBlank @Email String email) {
+            this.email = email;
+            return this;
+        }
+
+        public NewAuthorRequestBuilder description(@NotBlank @Size(max = 400) String description) {
+            this.description = description;
+            return this;
+        }
+
+        public NewAuthorRequest build() {
+            return new NewAuthorRequest(name, email, description);
+        }
+
+        public String toString() {
+            return "NewAuthorRequest.NewAuthorRequestBuilder(name=" + this.name + ", email=" + this.email + ", description=" + this.description + ")";
+        }
     }
 }

@@ -1,7 +1,6 @@
 package run.victor.api.codehouse.request;
 
 import javax.persistence.EntityManager;
-import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Min;
@@ -10,19 +9,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.DateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.val;
-import org.springframework.format.annotation.DateTimeFormat;
 import run.victor.api.codehouse.model.Author;
 import run.victor.api.codehouse.model.Book;
 import run.victor.api.codehouse.model.Category;
@@ -89,7 +78,17 @@ public class NewBookRequest {
     public Book toModel(EntityManager entityManager) {
         Author author = entityManager.find(Author.class, idAuthor);
         Category category = entityManager.find(Category.class, idCategory);
-        return Book.create(title, description, sumary, price, pages, isbn, publishDate, category, author);
+        return Book.builder()
+            .title(title)
+            .description(description)
+            .sumary(sumary)
+            .price(price)
+            .pages(pages)
+            .isbn(isbn)
+            .publishDate(publishDate)
+            .author(author)
+            .category(category)
+            .build();
     }
 
     public String getTitle() {

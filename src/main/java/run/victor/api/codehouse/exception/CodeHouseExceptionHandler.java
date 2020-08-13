@@ -4,6 +4,7 @@ import javax.validation.ValidationException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,14 @@ public class CodeHouseExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
         return getErrors(ex);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidFormatException.class)
+    public Map<String, String> handleInvalidFormatException(InvalidFormatException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("Error:", ex.getLocalizedMessage());
+        return errors;
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
