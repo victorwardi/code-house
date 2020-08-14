@@ -25,10 +25,14 @@ public class StatesController {
 
     @PostMapping
     @Transactional
-    public State registerState(@RequestBody @Valid NewStateRequest newStateRequest){
+    public State registerState(@RequestBody @Valid NewStateRequest newStateRequest) {
         final State state = newStateRequest.toModel(entityManager);
         entityManager.persist(state);
         return state;
     }
 
 }
+ 
+ 
+    
+                                 

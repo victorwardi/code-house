@@ -46,4 +46,8 @@ public class State {
     public Country getCountry() {
         return country;
     }
+
+    public boolean belongToCountry(Country country) {
+        return this.country.equals(country);
+    }
 }
