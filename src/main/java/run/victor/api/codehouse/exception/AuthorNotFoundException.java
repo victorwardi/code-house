@@ -3,9 +3,9 @@ package run.victor.api.codehouse.exception;
 /**
  * @author Victor Wardi - @victorwardi
  */
-public class AuthorNotFoundExcepiton extends RuntimeException {
+public class AuthorNotFoundException extends RuntimeException {
 
-    public AuthorNotFoundExcepiton() {
+    public AuthorNotFoundException() {
         super("No Author found!");
     }
 }

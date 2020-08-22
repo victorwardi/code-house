@@ -2,7 +2,7 @@ package run.victor.api.codehouse.validator;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import run.victor.api.codehouse.novopagamento.NewPaymentRequest;
+import run.victor.api.codehouse.neworder.NewPurchaseRequest;
 
 /**
  * @author Victor Wardi - @victorwardi
@@ -10,7 +10,7 @@ import run.victor.api.codehouse.novopagamento.NewPaymentRequest;
 public class CheckDocumentValidator implements Validator {
     @Override
     public boolean supports(Class<?> aClass) {
-        return NewPaymentRequest.class.isAssignableFrom(aClass);
+        return NewPurchaseRequest.class.isAssignableFrom(aClass);
     }
 
     @Override
@@ -19,9 +19,9 @@ public class CheckDocumentValidator implements Validator {
             return;
         }
 
-        NewPaymentRequest newPaymentRequest = (NewPaymentRequest) o;
+        NewPurchaseRequest newPurchaseRequest = (NewPurchaseRequest) o;
 
-      if(!newPaymentRequest.isDocumentValid()){
+      if(!newPurchaseRequest.isDocumentValid()){
                 errors.rejectValue("document", null, "Document must be a valid CPF or CPNJ");
       }
 

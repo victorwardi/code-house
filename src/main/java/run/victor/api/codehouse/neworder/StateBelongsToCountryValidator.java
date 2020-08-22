@@ -1,4 +1,4 @@
-package run.victor.api.codehouse.novopagamento;
+package run.victor.api.codehouse.neworder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,21 +20,24 @@ public class StateBelongsToCountryValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return NewPaymentRequest.class.isAssignableFrom(aClass);
+        return NewPurchaseRequest.class.isAssignableFrom(aClass);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             return;
         }
-        final NewPaymentRequest newPaymentRequest = (NewPaymentRequest) o;
 
-        final Country country = entityManager.find(Country.class, newPaymentRequest.getCountryId());
-        final State state = entityManager.find(State.class, newPaymentRequest.getStateId());
+        final NewPurchaseRequest newPurchaseRequest = (NewPurchaseRequest) o;
 
-        if(!state.belongToCountry(country)){
-            errors.rejectValue("stateId", null, "State does not belong to country");
+        if (newPurchaseRequest.hasState()) {
+            final Country country = entityManager.find(Country.class, newPurchaseRequest.getCountryId());
+            final State state = entityManager.find(State.class, newPurchaseRequest.getStateId());
+
+            if (!state.belongToCountry(country)) {
+                errors.rejectValue("stateId", null, "State does not belong to country");
+            }
         }
     }
 }

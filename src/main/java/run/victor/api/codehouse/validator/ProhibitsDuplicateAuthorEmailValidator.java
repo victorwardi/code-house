@@ -31,8 +31,8 @@ public class ProhibitsDuplicateAuthorEmailValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        //Only validates email if default properties have been checked. and there is no more erros
-        if(errors.hasErrors()){
+        //Only validates email if default properties have been checked. and there is no more errors
+        if (errors.hasErrors()) {
             return;
         }
         NewAuthorRequest author = (NewAuthorRequest) o;

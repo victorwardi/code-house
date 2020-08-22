@@ -1,9 +1,12 @@
-package run.victor.api.codehouse.novopagamento;
+package run.victor.api.codehouse.neworder;
 
 import javax.persistence.EntityManager;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import java.util.function.Function;
 
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
@@ -11,13 +14,15 @@ import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 import org.springframework.util.Assert;
 import run.victor.api.codehouse.model.Country;
+import run.victor.api.codehouse.model.Order;
+import run.victor.api.codehouse.model.Purchase;
 import run.victor.api.codehouse.model.State;
 import run.victor.api.codehouse.validator.IdExists;
 
 /**
  * @author Victor Wardi - @victorwardi
  */
-public class NewPaymentRequest {
+public class NewPurchaseRequest {
 
     @NotBlank
     @Email
@@ -49,14 +54,16 @@ public class NewPaymentRequest {
     private final Long stateId;
 
     @NotBlank
-    private final String telefone;
+    private final String telephone;
 
     @NotBlank
     private final String zipcode;
 
-    public NewPaymentRequest(@NotBlank @Email String email, @NotBlank String firstName, @NotBlank String lastName,
-                             @CPF @CNPJ @NotBlank String document, @NotBlank String address, @NotBlank String complement,
-                             @NotBlank String city, @NotNull Long countryId, Long stateId, @NotBlank String telefone, @NotBlank String zipcode) {
+    @NotNull(message = "Cart cannot be null")
+    @Valid
+    private final NewOrderRequest order;
+
+    public NewPurchaseRequest(@NotBlank @Email String email, @NotBlank String firstName, @NotBlank String lastName, @CPF @CNPJ @NotBlank String document, @NotBlank String address, @NotBlank String complement, @NotBlank String city, @NotNull Long countryId, Long stateId, @NotBlank String telephone, @NotBlank String zipcode, @NotNull @Valid NewOrderRequest order) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -66,8 +73,9 @@ public class NewPaymentRequest {
         this.city = city;
         this.countryId = countryId;
         this.stateId = stateId;
-        this.telefone = telefone;
+        this.telephone = telephone;
         this.zipcode = zipcode;
+        this.order = order;
     }
 
     public String getEmail() {
@@ -106,12 +114,16 @@ public class NewPaymentRequest {
         return stateId;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getTelephone() {
+        return telephone;
     }
 
     public String getZipcode() {
         return zipcode;
+    }
+
+    public NewOrderRequest getOrder() {
+        return order;
     }
 
     public boolean isDocumentValid() {
@@ -128,4 +140,18 @@ public class NewPaymentRequest {
         return cpfValidator.isValid(document, null) || cnpjValidator.isValid(document, null);
     }
 
+    public Purchase toModel(EntityManager manager) {
+        Country country = manager.find(Country.class, countryId);
+        Function<Purchase, Order> createOrder = order.toModel(manager);
+        final Purchase purchase = new Purchase(email, firstName, lastName, document, address, complement, city, zipcode, telephone, country, createOrder);
+
+        if(stateId != null){
+            purchase.setState(manager.find(State.class, stateId));
+        }
+        return purchase;
+    }
+
+    public boolean hasState() {
+        return stateId != null;
+    }
 }

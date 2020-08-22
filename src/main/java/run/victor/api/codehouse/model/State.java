@@ -50,4 +50,9 @@ public class State {
     public boolean belongToCountry(Country country) {
         return this.country.equals(country);
     }
+
+    @Override
+    public String toString() {
+        return "State{" + "id=" + id + ", name='" + name + '\'' + ", country=" + country + '}';
+    }
 }
