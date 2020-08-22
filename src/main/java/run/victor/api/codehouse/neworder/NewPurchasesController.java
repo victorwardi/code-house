@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import run.victor.api.codehouse.model.Purchase;
+import run.victor.api.codehouse.validator.CouponValidator;
 import run.victor.api.codehouse.validator.CheckDocumentValidator;
 
 /**
@@ -26,10 +27,12 @@ public class NewPurchasesController {
 
     private final StateBelongsToCountryValidator stateBelongsToCountryValidator;
     private final OrderTotalValidator orderTotalValidator;
+    private final CouponValidator couponValidator;
 
-    public NewPurchasesController(StateBelongsToCountryValidator stateBelongsToCountryValidator, OrderTotalValidator orderTotalValidator) {
+    public NewPurchasesController(StateBelongsToCountryValidator stateBelongsToCountryValidator, OrderTotalValidator orderTotalValidator, CouponValidator couponValidator) {
         this.stateBelongsToCountryValidator = stateBelongsToCountryValidator;
         this.orderTotalValidator = orderTotalValidator;
+        this.couponValidator = couponValidator;
     }
 
     @InitBinder
@@ -37,6 +40,7 @@ public class NewPurchasesController {
         webDataBinder.addValidators(new CheckDocumentValidator());
         webDataBinder.addValidators(orderTotalValidator);
         webDataBinder.addValidators(stateBelongsToCountryValidator);
+        webDataBinder.addValidators(couponValidator);
     }
 
     @PostMapping

@@ -6,6 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.function.Function;
 
 import org.hibernate.validator.constraints.br.CNPJ;
@@ -14,6 +15,7 @@ import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 import org.springframework.util.Assert;
 import run.victor.api.codehouse.model.Country;
+import run.victor.api.codehouse.model.Coupon;
 import run.victor.api.codehouse.model.Order;
 import run.victor.api.codehouse.model.Purchase;
 import run.victor.api.codehouse.model.State;
@@ -63,7 +65,10 @@ public class NewPurchaseRequest {
     @Valid
     private final NewOrderRequest order;
 
-    public NewPurchaseRequest(@NotBlank @Email String email, @NotBlank String firstName, @NotBlank String lastName, @CPF @CNPJ @NotBlank String document, @NotBlank String address, @NotBlank String complement, @NotBlank String city, @NotNull Long countryId, Long stateId, @NotBlank String telephone, @NotBlank String zipcode, @NotNull @Valid NewOrderRequest order) {
+    @IdExists(domainClass = Coupon.class, fieldName = "code")
+    private final String coupon;
+
+    public NewPurchaseRequest(@NotBlank @Email String email, @NotBlank String firstName, @NotBlank String lastName, @CPF @CNPJ @NotBlank String document, @NotBlank String address, @NotBlank String complement, @NotBlank String city, @NotNull Long countryId, Long stateId, @NotBlank String telephone, @NotBlank String zipcode, @NotNull @Valid NewOrderRequest order, String coupon) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -76,6 +81,7 @@ public class NewPurchaseRequest {
         this.telephone = telephone;
         this.zipcode = zipcode;
         this.order = order;
+        this.coupon = coupon;
     }
 
     public String getEmail() {
@@ -126,6 +132,10 @@ public class NewPurchaseRequest {
         return order;
     }
 
+    public String getCoupon() {
+        return coupon;
+    }
+
     public boolean isDocumentValid() {
         Assert.hasLength(document, "A document is required.");
 
@@ -153,5 +163,13 @@ public class NewPurchaseRequest {
 
     public boolean hasState() {
         return stateId != null;
+    }
+
+    public boolean isCouponValid(EntityManager entityManager) {
+        if(coupon == null){
+            return true;
+        }
+        final Coupon coupon =  entityManager.find(Coupon.class, this.coupon);
+        return coupon.getExpiration().isAfter(LocalDateTime.now());
     }
 }
