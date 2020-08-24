@@ -6,12 +6,15 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import run.victor.api.codehouse.model.Purchase;
+import run.victor.api.codehouse.request.PurchaseDetailsResponse;
 import run.victor.api.codehouse.validator.CouponValidator;
 import run.victor.api.codehouse.validator.CheckDocumentValidator;
 
@@ -49,5 +52,12 @@ public class NewPurchasesController {
         Purchase purchase = newPurchaseRequest.toModel(entityManager);
         entityManager.persist(purchase);
         return purchase.toString();
+    }
+
+    @GetMapping("/{purchaseId}")
+    public PurchaseDetailsResponse registerPurchase(@PathVariable Long purchaseId) {
+        final Purchase purchase = entityManager.find(Purchase.class, purchaseId);
+        PurchaseDetailsResponse purchaseDetailsResponse =  new PurchaseDetailsResponse(purchase);
+        return purchaseDetailsResponse;
     }
 }

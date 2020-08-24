@@ -6,6 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.function.Function;
 
@@ -14,6 +15,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import run.victor.api.codehouse.model.Country;
 import run.victor.api.codehouse.model.Coupon;
 import run.victor.api.codehouse.model.Order;
@@ -53,7 +55,7 @@ public class NewPurchaseRequest {
     private final Long countryId;
 
     @IdExists(domainClass = State.class, fieldName = "id")
-    private final Long stateId;
+    private Long stateId;
 
     @NotBlank
     private final String telephone;
@@ -66,9 +68,9 @@ public class NewPurchaseRequest {
     private final NewOrderRequest order;
 
     @IdExists(domainClass = Coupon.class, fieldName = "code")
-    private final String coupon;
+    private String coupon;
 
-    public NewPurchaseRequest(@NotBlank @Email String email, @NotBlank String firstName, @NotBlank String lastName, @CPF @CNPJ @NotBlank String document, @NotBlank String address, @NotBlank String complement, @NotBlank String city, @NotNull Long countryId, Long stateId, @NotBlank String telephone, @NotBlank String zipcode, @NotNull @Valid NewOrderRequest order, String coupon) {
+    public NewPurchaseRequest(@NotBlank @Email String email, @NotBlank String firstName, @NotBlank String lastName, @CPF @CNPJ @NotBlank String document, @NotBlank String address, @NotBlank String complement, @NotBlank String city, @NotNull Long countryId, @NotBlank String telephone, @NotBlank String zipcode, @NotNull @Valid NewOrderRequest order) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -77,11 +79,9 @@ public class NewPurchaseRequest {
         this.complement = complement;
         this.city = city;
         this.countryId = countryId;
-        this.stateId = stateId;
         this.telephone = telephone;
         this.zipcode = zipcode;
         this.order = order;
-        this.coupon = coupon;
     }
 
     public String getEmail() {
@@ -158,18 +158,26 @@ public class NewPurchaseRequest {
         if(stateId != null){
             purchase.setState(manager.find(State.class, stateId));
         }
+
+        if(StringUtils.hasText(coupon)){
+            purchase.applyCoupon(manager.find(Coupon.class, coupon));
+        }
+
         return purchase;
     }
-
     public boolean hasState() {
         return stateId != null;
     }
 
-    public boolean isCouponValid(EntityManager entityManager) {
-        if(coupon == null){
-            return true;
-        }
-        final Coupon coupon =  entityManager.find(Coupon.class, this.coupon);
-        return coupon.getExpiration().isAfter(LocalDateTime.now());
+    public void setStateId(Long stateId) {
+        this.stateId = stateId;
+    }
+
+    public void setCoupon(String coupon) {
+        this.coupon = coupon;
+    }
+
+    public boolean hasCoupon() {
+        return StringUtils.hasText(coupon);
     }
 }

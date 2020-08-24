@@ -1,12 +1,15 @@
 package run.victor.api.codehouse.model;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.Id;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import antlr.StringUtils;
 
 /**
  * @author Victor Wardi - @victorwardi
@@ -46,4 +49,9 @@ public class Coupon {
     public LocalDateTime getExpiration() {
         return expiration;
     }
+
+    public boolean isValid() {
+        return this.getExpiration().isAfter(LocalDateTime.now());
+    }
 }
+

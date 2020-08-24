@@ -51,10 +51,17 @@ public class Order {
         return items;
     }
 
+
+    public BigDecimal getTotal() {
+        BigDecimal total = items.stream().map(ItemOrder::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return total;
+    }
+
     public boolean checkTotal(BigDecimal total) {
-        final BigDecimal totalFromServer = items.stream().map(ItemOrder::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalFromServer = getTotal();
         return total.compareTo(totalFromServer) == 0;
     }
+
 
     @Override
     public String toString() {

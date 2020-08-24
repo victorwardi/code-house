@@ -5,15 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import java.util.function.Function;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import run.victor.api.codehouse.model.Country;
-import run.victor.api.codehouse.model.State;
+import org.springframework.util.Assert;
 
 /**
  * @author Victor Wardi - @victorwardi
@@ -33,7 +30,7 @@ public class Purchase {
     private  String complement;
     private  String city;
     private  String zipcode;
-    private  String telefone;
+    private  String telephone;
 
     @ManyToOne
     private  Country country;
@@ -44,8 +41,10 @@ public class Purchase {
     @OneToOne(mappedBy = "purchase", cascade = CascadeType.PERSIST)
     private Order order;
 
+    private CouponApplied couponApplied;
+
     public Purchase(String email, String firstName, String lastName, String document, String address, String complement,
-                    String city, String zipcode, String telefone, Country country, Function<Purchase, Order> createOrder) {
+                    String city, String zipcode, String telephone, Country country, Function<Purchase, Order> createOrder) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -54,7 +53,7 @@ public class Purchase {
         this.complement = complement;
         this.city = city;
         this.zipcode = zipcode;
-        this.telefone = telefone;
+        this.telephone = telephone;
         this.country = country;
         this.order = createOrder.apply(this);
     }
@@ -98,8 +97,8 @@ public class Purchase {
         return zipcode;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getTelephone() {
+        return telephone;
     }
 
     public Country getCountry() {
@@ -110,16 +109,28 @@ public class Purchase {
         return state;
     }
 
-    public void setState(State state) {
-        this.state = state;
-    }
-
     public Order getOrder() {
         return order;
     }
 
+    public CouponApplied getCouponApplied() {
+        return couponApplied;
+    }
+
+    public void setState(State state) {
+        Assert.notNull(country, "It is no allowed to add a state without a country.");
+        Assert.isTrue(state.belongToCountry(country), "The state: '"+ state.getName() +"' does not belong to the country: '" + country.getName() + "'.");
+        this.state = state;
+    }
+
+    public void applyCoupon(Coupon coupon) {
+        Assert.isTrue(coupon.isValid(), "Coupon is invalid.");
+        Assert.isNull(couponApplied, "A coupon was already applied to this purchase.");
+        this.couponApplied  = new CouponApplied(coupon.getCode(), coupon.getDiscount());
+    }
+
     @Override
     public String toString() {
-        return "Purchase{" + "id=" + id + ", email='" + email + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", document='" + document + '\'' + ", address='" + address + '\'' + ", complement='" + complement + '\'' + ", city='" + city + '\'' + ", zipcode='" + zipcode + '\'' + ", telefone='" + telefone + '\'' + ", country=" + country + ", state=" + state + ", order=" + order + '}';
+        return "Purchase{" + "id=" + id + ", email='" + email + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", document='" + document + '\'' + ", address='" + address + '\'' + ", complement='" + complement + '\'' + ", city='" + city + '\'' + ", zipcode='" + zipcode + '\'' + ", telephone='" + telephone + '\'' + ", country=" + country + ", state=" + state + ", order=" + order + ", couponApplied=" + couponApplied + '}';
     }
 }

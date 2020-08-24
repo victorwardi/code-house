@@ -6,6 +6,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import run.victor.api.codehouse.model.Coupon;
 import run.victor.api.codehouse.neworder.NewPurchaseRequest;
 
 /**
@@ -24,16 +25,16 @@ public class CouponValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             return;
         }
 
         NewPurchaseRequest newPurchaseRequest = (NewPurchaseRequest) o;
-
-      if(!newPurchaseRequest.isCouponValid(entityManager)){
+        if (newPurchaseRequest.hasCoupon()) {
+            final Coupon coupon =  entityManager.find(Coupon.class, newPurchaseRequest.getCoupon());
+            if (!coupon.isValid()) {
                 errors.rejectValue("coupon", null, "Coupon must be a valid");
-      }
-
-
+            }
+        }
     }
 }

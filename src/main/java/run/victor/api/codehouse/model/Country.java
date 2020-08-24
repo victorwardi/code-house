@@ -49,4 +49,9 @@ public class Country {
     public int hashCode() {
         return Objects.hash(name);
     }
+
+    @Override
+    public String toString() {
+        return "Country{" + "id=" + id + ", name='" + name + '\'' + '}';
+    }
 }

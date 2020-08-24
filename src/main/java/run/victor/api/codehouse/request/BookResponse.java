@@ -1,5 +1,7 @@
 package run.victor.api.codehouse.request;
 
+import run.victor.api.codehouse.model.Book;
+
 /**
  * @author Victor Wardi - @victorwardi
  */
@@ -11,6 +13,10 @@ public class BookResponse {
     public BookResponse(Long id, String title) {
         this.id = id;
         this.title = title;
+    }
+
+    public static BookResponse fromModel(Book book) {
+        return new BookResponse(book.getId(), book.getTitle());
     }
 
     @Override
