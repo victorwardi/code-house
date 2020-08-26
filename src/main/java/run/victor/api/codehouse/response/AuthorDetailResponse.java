@@ -1,4 +1,4 @@
-package run.victor.api.codehouse.request;
+package run.victor.api.codehouse.response;
 
 import run.victor.api.codehouse.model.Author;
 

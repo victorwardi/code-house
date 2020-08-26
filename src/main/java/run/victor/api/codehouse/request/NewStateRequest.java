@@ -28,6 +28,11 @@ public class NewStateRequest {
         return state;
     }
 
+    public NewStateRequest(@NotBlank String name, @NotNull Long countryId) {
+        this.name = name;
+        this.countryId = countryId;
+    }
+
     public String getName() {
         return name;
     }

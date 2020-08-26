@@ -30,7 +30,6 @@ public class StatesController {
         entityManager.persist(state);
         return state;
     }
-
 }
  
  

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import run.victor.api.codehouse.model.Book;
+import run.victor.api.codehouse.response.BooksListResponse;
 
 /**
  * @author Victor Wardi - @victorwardi

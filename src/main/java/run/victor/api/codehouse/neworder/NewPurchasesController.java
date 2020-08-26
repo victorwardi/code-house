@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import run.victor.api.codehouse.model.Purchase;
-import run.victor.api.codehouse.request.PurchaseDetailsResponse;
+import run.victor.api.codehouse.response.PurchaseDetailsResponse;
 import run.victor.api.codehouse.validator.CouponValidator;
 import run.victor.api.codehouse.validator.CheckDocumentValidator;
 

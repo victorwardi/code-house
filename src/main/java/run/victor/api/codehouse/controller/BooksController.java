@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import run.victor.api.codehouse.model.Book;
 import run.victor.api.codehouse.repository.BookRepository;
-import run.victor.api.codehouse.request.BookDetailResponse;
-import run.victor.api.codehouse.request.BooksListResponse;
+import run.victor.api.codehouse.response.BookDetailResponse;
+import run.victor.api.codehouse.response.BooksListResponse;
 import run.victor.api.codehouse.request.NewAuthorRequest;
 import run.victor.api.codehouse.request.NewBookRequest;
 

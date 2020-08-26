@@ -1,6 +1,8 @@
-package run.victor.api.codehouse.request;
+package run.victor.api.codehouse.response;
 
 import java.math.BigDecimal;
+
+import run.victor.api.codehouse.model.ItemOrder;
 
 /**
  * @author Victor Wardi - @victorwardi
@@ -15,6 +17,11 @@ public class ItemOrderResponse {
         this.book = book;
         this.quantity = quantity;
         this.currentBookPrice = currentBookPrice;
+    }
+
+    public static ItemOrderResponse fromModel(ItemOrder itemOrder){
+        final BookResponse bookResponse = BookResponse.fromModel(itemOrder.getBook());
+        return new ItemOrderResponse(bookResponse, itemOrder.getQuantity(), itemOrder.getCurrentBookPrice());
     }
 
     public BookResponse getBook() {
