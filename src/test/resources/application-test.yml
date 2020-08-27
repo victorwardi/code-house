@@ -10,10 +10,10 @@ spring:
     password:
     driverClassName: org.h2.Driver
 #    initialization-mode: always
-    data: classpath:data/data-test.sql
+    data: classpath:data-test.sql
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     generate-ddl: true
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop

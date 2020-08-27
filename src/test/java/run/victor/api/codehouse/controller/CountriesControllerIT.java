@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import run.victor.api.codehouse.request.NewCountryRequest;
 
 import static org.hamcrest.Matchers.containsString;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-//@Sql(scripts = "/data/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Transactional
 class CountriesControllerIT {
 
     private static final String URL = "/v1/countries";
@@ -42,9 +42,9 @@ class CountriesControllerIT {
 
     @Test
     void whenCountryNameDuplicated_thenReturnsStatus400() throws Exception {
-        //Brazil category is already registered on DB.
-        final NewCountryRequest validCountry = new NewCountryRequest("Brazil");
-        String requestBody = objectMapper.writeValueAsString(validCountry);
+        //Brazil country is already registered on DB.
+        final NewCountryRequest countryDuplicated = new NewCountryRequest("Brazil");
+        String requestBody = objectMapper.writeValueAsString(countryDuplicated);
         mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
             .andExpect(status().isBadRequest())
             .andExpect(content().string(containsString("must be unique")));
@@ -52,8 +52,8 @@ class CountriesControllerIT {
 
     @Test
     void whenCategoryNameNotInformed_thenReturnsStatus400() throws Exception {
-        final NewCountryRequest validCountry = new NewCountryRequest("");
-        String requestBody = objectMapper.writeValueAsString(validCountry);
+        final NewCountryRequest countryWithBlankName = new NewCountryRequest("");
+        String requestBody = objectMapper.writeValueAsString(countryWithBlankName);
         mockMvc.perform(post(URL).contentType("application/json").content(requestBody))
             .andExpect(status().isBadRequest())
             .andExpect(content().string(containsString("must not be blank")));

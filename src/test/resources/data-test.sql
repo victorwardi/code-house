@@ -22,7 +22,7 @@ insert into book (author_id, category_id, description, isbn, pages, price, publi
 values (2, 2, 'Master the main Java web framework', '978-85-5519-019-3', 260, 78.00, NOW(), 'sumary...', 'Spring MVC');
 
 -- Countries ###########################################################################################################################
- insert into country (id, name) values (1, 'Brazil');
+insert into country (id, name) values (1, 'Brazil');
 insert into country (id, name) values (2, 'Germany');
 
 -- States ##############################################################################################################################
